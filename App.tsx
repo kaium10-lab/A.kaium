@@ -78,6 +78,7 @@ const App: React.FC = () => {
   const [portfolioData, setPortfolioData] = useState<PortfolioData>(INITIAL_DATA);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
 
+  // Load saved data on startup
   useEffect(() => {
     const savedData = localStorage.getItem('portfolio_data');
     if (savedData) {
@@ -90,6 +91,16 @@ const App: React.FC = () => {
     const timer = setTimeout(() => setIsLoaded(true), 100);
     return () => clearTimeout(timer);
   }, []);
+
+  // Update Favicon dynamically when it changes in portfolioData
+  useEffect(() => {
+    if (portfolioData.hero.favicon) {
+      const link = document.getElementById('favicon') as HTMLLinkElement;
+      if (link) {
+        link.href = portfolioData.hero.favicon;
+      }
+    }
+  }, [portfolioData.hero.favicon]);
 
   const handleSaveData = (newData: PortfolioData) => {
     setPortfolioData(newData);
